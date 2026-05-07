@@ -13,7 +13,7 @@ pipeline {
                 deleteDir()
                 dir('web-repo') {
                   git branch: 'testing',
-                  url: "${WEB_REPO_URL},
+                  url: "${env.WEB_REPO_URL}",
                   credentialsId: 'usuario'
                 }
 
