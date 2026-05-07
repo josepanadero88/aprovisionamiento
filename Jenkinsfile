@@ -10,11 +10,10 @@ pipeline {
     stages {
         stage("Preparando entorno (build)") {
             steps {
-                deleteDir()
                 dir('web-repo') {
                     git branch: 'testing',
                     url: "${env.WEB_REPO_URL}",
-                    credentialsId: 'usuario'
+                    credentialsId: 'ClaveJenkinsCICDusuario'
                 }
 
                 sh 'cd docker && docker-compose up -d --build'
