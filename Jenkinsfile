@@ -31,7 +31,7 @@ pipeline {
             steps {
                 // 1. Ejecutamos el test desde el contenedor cliente
                 // 2. Usamos pytest para generar el reporte XML JUnit
-                sh 'docker exec cliente pytest /ansible/test_web.py --junitxml=/ansible/results.xml'
+                sh 'docker exec cliente python3 -m pytest /ansible/test_web.py --junitxml=/ansible/results.xml'
             }
         }
     }
