@@ -14,7 +14,7 @@ pipeline {
                 dir('web-repo') {
                     git branch: 'testing',
                     url: "${env.WEB_REPO_URL}",
-                    credentialsId: 'ClaveJenkinsCICDusuario'
+                    credentialsId: 'usuario'
                 }
 
                 sh 'cd docker && docker-compose up -d --build'
