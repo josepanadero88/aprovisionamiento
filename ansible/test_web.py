@@ -1,17 +1,11 @@
-import os
+import requests
 
-# En el Jenkinsfile haremos que el contenedor 'cliente' haga un curl
-response = os.system("curl -s web-preproduccion:8083 | grep 'José Alfonso Panadero Estudillo'")
-
-with open("result.xml", "w") as f:
-    f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-    f.write('<testsuites>\n  <testsuite name="WebCheck">\n')
-    if response == 0:
-        f.write('    <testcase name="VerificarNombre" status="passed"/>\n')
-    else:
-        f.write('    <testcase name="VerificarNombre" status="failed">\n')
-        f.write('      <failure message="Nombre no encontrado en la web"/>\n    </testcase>\n')
-    f.write('  </testsuite>\n</testsuites>')
-
-if response != 0:
-    exit(1)
+def test_web_content():
+    # El cliente usa contenedor web para ver URL.
+    url = "http://172.19.0.2:8083"
+    response = requests.get(url)
+    # El encoding para las tildes del nombre.
+    response.encoding = 'utf-8'
+ # Verificamos código 200 y nombre
+    assert response.status_code == 200
+    assert "José Alfonso Panadero Estudillo" in response.text
