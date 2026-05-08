@@ -2,7 +2,7 @@ import requests
 
 def test_web_content():
     # El cliente usa contenedor web para ver URL.
-    url = "http://172.19.0.2:8083"
+    url = "http://web-produccion:8083"
     response = requests.get(url)
     # El encoding para las tildes del nombre.
     response.encoding = 'utf-8'
