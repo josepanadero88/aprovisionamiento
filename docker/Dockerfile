@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y \
     ansible \
     curl \
     git \
+    python3-pytest \
+    python3-requests \
     && apt-get clean
 
 EXPOSE 8083
