@@ -13,7 +13,7 @@ pipeline {
                 dir('web-repo') {
                     git branch: 'testing',
                     url: "${env.WEB_REPO_URL}",
-                    credentialsId: 'ClaveJenkinsCICDusuario'
+                    credentialsId: 'usuario'
                 }
 
                 sh 'cd docker && docker-compose up -d --build'
@@ -50,7 +50,7 @@ pipeline {
             // git checkout master || git checkout -b master, si no puede cambiar de rama, la crea, suele fallar la 1 vez
             echo "Pruebas exitosas. Realizando promoción a master..."
             dir('web-repo') {
-                sshagent(['ClaveJenkinsCICDusuario']) { // sshagent nos permite usar llave SSH para push
+                sshagent(['ClaveJenkinsCICD']) { // sshagent nos permite usar llave SSH para push
                     sh '''
                         git config user.email "jenkins@despliegue.es"
                         git config user.name "jenkins panadero"
