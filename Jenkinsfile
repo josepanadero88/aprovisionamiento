@@ -4,7 +4,7 @@ pipeline {
     environment {
         // ID de la BUILD
         BUILD_ID = "${env.BUILD_NUMBER}"
-        WEB_REPO_URL = "git@git.virt.cga:japanadero/web.git"
+        WEB_REPO_URL = "https://github.com/josepanadero88/web.git"
     }
 
     stages {
@@ -13,7 +13,7 @@ pipeline {
                 dir('web-repo') {
                     git branch: 'testing',
                     url: "${env.WEB_REPO_URL}",
-                    credentialsId: 'usuario'
+                    credentialsId: 'Jenkins-Github'
                 }
 
                 sh 'cd docker && docker-compose up -d --build'
@@ -50,14 +50,18 @@ pipeline {
             // git checkout master || git checkout -b master, si no puede cambiar de rama, la crea, suele fallar la 1 vez
             echo "Pruebas exitosas. Realizando promoción a master..."
             dir('web-repo') {
-                sshagent(['ClaveJenkinsCICD']) { // sshagent nos permite usar llave SSH para push
-                    sh '''
+              withCredentials([usernamePassword(credentialsId: 'github-token', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    sh """
                         git config user.email "jenkins@despliegue.es"
                         git config user.name "jenkins panadero"
+                        
+                        # Configuramos la URL para que incluya las credenciales temporalmente para el push
+                        git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/josepanadero88/web.git
+                        
                         git checkout master || git checkout -b master
                         git merge origin/testing
                         git push origin master
-                    '''
+                    """
                 }
             }
         }
